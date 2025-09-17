@@ -5,10 +5,12 @@ from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-from sqlalchemy.ext.declarative import declarative_base
 
 from alembic import context
 from dotenv import load_dotenv
+
+# Import our models and Base
+from app.db.models import Base
 
 print("Loading environment variables from .env file for scripts")
 load_dotenv("../.env")
@@ -16,13 +18,11 @@ load_dotenv("../.env")
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-url = os.getenv("DATABASE_URL").format(
-    DB_USER=os.getenv("DB_USER"),
-    DB_PASSWORD=os.getenv("DB_PASSWORD"),
-    DB_NAME=os.getenv("DB_NAME"),
-)
-print("Database URL:", url)
-config.set_main_option("sqlalchemy.url", url)
+
+# Use our database URL from environment or default to SQLite for testing
+database_url = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./test.db")
+print("Database URL:", database_url)
+config.set_main_option("sqlalchemy.url", database_url)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -31,9 +31,6 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-Base = declarative_base()
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
