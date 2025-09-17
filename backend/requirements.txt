@@ -10,3 +10,9 @@ httpx
 psycopg2-binary
 pgvector
 aiosqlite
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+authlib
+itsdangerous
+email-validator
