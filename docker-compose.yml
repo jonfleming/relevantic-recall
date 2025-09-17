@@ -54,7 +54,7 @@ services:
   # Relevantic Recall Application
   app:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: relevantic_app
     env_file:

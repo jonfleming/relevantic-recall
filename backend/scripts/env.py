@@ -31,10 +31,12 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-Base = declarative_base()
-target_metadata = Base.metadata
+# Import from migrations/models.py to get the correct metadata
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'migrations'))
+from models import metadata
+target_metadata = metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

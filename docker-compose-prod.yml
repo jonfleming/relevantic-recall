@@ -62,7 +62,7 @@ services:
 
   app:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: relevantic_app_prod
     environment:
