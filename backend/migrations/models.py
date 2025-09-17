@@ -24,7 +24,6 @@ class Conversation_Item(Base):
     input_item_id = Column(Integer, ForeignKey("conversation_items.item_id"))
     type_id = Column(Integer)
     session_id = Column(Integer)
-    topic = Column(String(255))
     user_id = Column(Integer, ForeignKey("students.id"))
     create_at = Column(DateTime, default=func.now())
     update_at = Column(DateTime, default=func.now(), onupdate=func.now())
