@@ -1,9 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from .api import router as api_router
 from .core.config import settings
 
 app = FastAPI(title="Relevantic Recall")
+
+# Add SessionMiddleware for OAuth state management
+app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
 
 # Add CORS middleware for OAuth callbacks
 app.add_middleware(

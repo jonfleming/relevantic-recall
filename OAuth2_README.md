@@ -46,7 +46,7 @@ GITHUB_CLIENT_SECRET=your-github-client-secret
 4. Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client IDs"
 5. Set authorized redirect URIs:
    - `http://localhost:8000/api/auth/callback/google` (development)
-   - `https://your-domain.com/api/auth/callback/google` (production)
+   - `https://recall.relevantic.net/api/auth/callback/google` (production)
 
 #### GitHub OAuth2 Setup
 
@@ -54,7 +54,7 @@ GITHUB_CLIENT_SECRET=your-github-client-secret
 2. Click "New OAuth App"
 3. Set Authorization callback URL:
    - `http://localhost:8000/api/auth/callback/github` (development)
-   - `https://your-domain.com/api/auth/callback/github` (production)
+   - `https://recall.relevantic.net/api/auth/callback/github` (production)
 
 ### 3. Database Migration
 

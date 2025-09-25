@@ -29,23 +29,23 @@ Local setup
    pip install -r requirements.txt
 
 3. Prepare databases (example using alembic migrations):
-
+```
    # run from repository root
    cd backend
    alembic -c alembic.ini upgrade head
-
+```
 Run (development)
 - Preferred (from repository root):
-
+```
   # ensure PYTHONPATH includes backend so `app` package is importable
   export PYTHONPATH="$PWD/backend"
   python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-
+```
 - Or run from inside `backend` dir:
-
+```
   cd backend
   python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-
+```
 VS Code debugging
 - There is a launch configuration: `Python: Uvicorn (FastAPI)` in `.vscode/launch.json` that runs uvicorn as a module with cwd set so relative imports work. Use that for breakpoints and step-through debugging.
 
@@ -62,4 +62,12 @@ Troubleshooting
 Notes
 - Secrets and credentials should be stored securely. See the `secrets/README.md` in the repo for guidance.
 
-If you want, I can add examples for docker-compose commands or a Makefile with common tasks.
+```
+# This should return "Not authenticate"
+http://localhost:8000/api/context/one
+
+# Should pop up Google Login
+http://localhost:8000/api/auth/login/google
+
+# Should pop up GitHub Login
+http://localhost:8000/api/auth/login/github

@@ -18,9 +18,11 @@ load_dotenv("../.env")
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-
-# Use our database URL from environment or default to SQLite for testing
-database_url = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./test.db")
+database_url = os.getenv("DATABASE_URL").format(
+    DB_USER=os.getenv("DB_USER"),
+    DB_PASSWORD=os.getenv("DB_PASSWORD"),
+    DB_NAME=os.getenv("DB_NAME"),
+)
 print("Database URL:", database_url)
 config.set_main_option("sqlalchemy.url", database_url)
 
