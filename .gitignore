@@ -104,3 +104,6 @@ Desktop.ini
 
 # Local secrets used by docker-compose-prod
 secrets/
+
+# Database files
+data/

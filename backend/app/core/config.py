@@ -1,16 +1,17 @@
 import os
 from typing import Optional
+from pydantic_settings import BaseSettings
 
-class Settings:
+class Settings(BaseSettings):
     # Basic app settings
     app_name: str = "Relevantic Recall"
     debug: bool = False
     
     # Database
-    database_url: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./test.db")
+    database_url: str = os.getenv("DATABASE_URL")
     
     # JWT settings
-    secret_key: str = os.getenv("SECRET_KEY", "your-secret-key-change-this-in-production")
+    secret_key: str = os.getenv("SECRET_KEY")
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
     

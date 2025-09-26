@@ -25,28 +25,29 @@ services:
 
   # Neo4j Graph Database
   neo4j:
-    image: neo4j:5.15
+    image: neo4j:latest # Or a specific version like neo4j:5.24.0
     container_name: relevantic_neo4j
     env_file:
-      - .env
-    environment:
-      NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-relevantic_password}
-      NEO4J_PLUGINS: '["apoc"]'
-      NEO4J_dbms_security_procedures_unrestricted: apoc.*
-      NEO4J_dbms_security_procedures_allowlist: apoc.*
-
-    ports:
-      - "7474:7474"  # HTTP
-      - "7687:7687"  # Bolt
+      - .env_neo4j
     volumes:
       - neo4j_data:/data
       - neo4j_logs:/logs
       - neo4j_import:/var/lib/neo4j/import
       - neo4j_plugins:/plugins
+      - neo4j_conf:/conf
+    environment:
+      - NEO4J_AUTH=${NEO4J_AUTH}
+      - NEO4J_apoc_export_file_enabled=true # Enable APOC export
+      - NEO4J_apoc_import_file_enabled=true # Enable APOC import
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_PLUGINS=["apoc", "graph-data-science"]      
+    ports:
+      - "7474:7474" # Neo4j Browser HTTP port
+      - "7687:7687" # Neo4j Bolt protocol port
     networks:
       - relevantic_network
     healthcheck:
-      test: ["CMD-SHELL", "cypher-shell -u ${NEO4J_USER:-neo4j} -p ${NEO4J_PASSWORD:-relevantic_password} 'RETURN 1'"]
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p relevantic_password 'RETURN 1'"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -54,7 +55,7 @@ services:
   # Relevantic Recall Application
   app:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: relevantic_app
     env_file:
@@ -62,7 +63,7 @@ services:
     environment:
       - DATABASE_URL=postgresql+asyncpg://${DB_USER:-relevantic_user}:${DB_PASSWORD:-relevantic_password}@postgres:5432/${DB_NAME:-relevantic_recall}
       - SYNC_DATABASE_URL=postgresql://${DB_USER:-relevantic_user}:${DB_PASSWORD:-relevantic_password}@postgres:5432/${DB_NAME:-relevantic_recall}
-      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_BOLT_URI=bolt://neo4j:7687
       - NEO4J_USER=${NEO4J_USER:-neo4j}
       - NEO4J_PASSWORD=${NEO4J_PASSWORD:-relevantic_password}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
@@ -87,6 +88,7 @@ volumes:
   neo4j_logs:
   neo4j_import:
   neo4j_plugins:
+  neo4j_conf:
 
 networks:
   relevantic_network:
